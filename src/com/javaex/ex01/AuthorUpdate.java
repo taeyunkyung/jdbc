@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class AuthorApp {
+public class AuthorUpdate {
 
 	public static void main(String[] args) {
 
@@ -24,25 +24,27 @@ public class AuthorApp {
 
 			// 3. SQL문 준비 / 바인딩 / 실행
 
-			// 문자열 만들기: ? 주의
+			// 문자열 만들기
 			String query = "";
-			// query = query+"문자열"
-			query += "insert into author ";
-			query += " values(seq_author_id.nextval, ?, ?)";
+			query += "update author ";
+			query += " set author_name = ?, ";
+			query += "    author_desc = ? ";
+			query += " where author_id = ? ";
 			System.out.println(query);
 
 			// 문자열 쿼리문으로 만들기
 			pstmt = conn.prepareStatement(query);
 
 			// 바인딩
-			pstmt.setString(1, "이문열"); // 첫번째 물음표의 데이터
-			pstmt.setString(2, "경북 영양"); // 두번째 물음표의 데이터
+			pstmt.setString(1, "김문열"); 
+			pstmt.setString(2, "삼국지 작가"); 
+			pstmt.setInt(3, 1);
 
 			// 실행
 			int count = pstmt.executeUpdate(); // 쿼리문 실행
 
 			// 4. 결과처리
-			System.out.println(count + "건이 저장되었습니다.");
+			System.out.println(count + "건이 수정되었습니다.");
 
 		} catch (ClassNotFoundException e) {
 			System.out.println("error: 드라이버 로딩실패 - " + e);
@@ -61,6 +63,6 @@ public class AuthorApp {
 				System.out.println("error." + e);
 			}
 		}
-		
 	}
+
 }
