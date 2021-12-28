@@ -5,10 +5,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookSelectAll {
 
 	public static void main(String[] args) {
+
+		List<BookAllVO> bookAllList = new ArrayList<BookAllVO>();
 
 		// 0. import java.sql.*;
 		Connection conn = null;
@@ -55,7 +59,18 @@ public class BookSelectAll {
 				String authorName = rs.getString("author_name");
 				String authorDesc = rs.getString("author_desc");
 
-				System.out.println(bookId + ". " + Title + ", " + Pubs + ", " + pubDate + ", " + authorId + ", " + authorName + ", " + authorDesc);
+				BookAllVO vo = new BookAllVO(bookId, Title, Pubs, pubDate, authorId, authorName, authorDesc);
+				bookAllList.add(vo);
+
+				// System.out.println(bookId + ". " + Title + ", " + Pubs + ", " + pubDate + ",
+				// " + authorId + ", " + authorName + ", " + authorDesc);
+			}
+
+			for (int i = 0; i < bookAllList.size(); i++) {
+				BookAllVO bookAllVo = bookAllList.get(i);
+				System.out.println(bookAllVo.getBookId() + ". " + bookAllVo.getTitle() + ", " + bookAllVo.getPubs()
+						+ ", " + bookAllVo.getPubDate() + ", " + bookAllVo.getAuthorId() + ", "
+						+ bookAllVo.getAuthorName() + ", " + bookAllVo.getAuthorDesc());
 			}
 
 		} catch (ClassNotFoundException e) {
