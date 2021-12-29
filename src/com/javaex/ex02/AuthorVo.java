@@ -9,7 +9,6 @@ public class AuthorVo {
 
 	// 생성자
 	public AuthorVo() {
-
 	}
 
 	public AuthorVo(int authorId, String authorName, String authorDesc) {

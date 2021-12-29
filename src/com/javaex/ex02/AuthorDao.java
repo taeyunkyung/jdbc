@@ -10,6 +10,17 @@ import java.util.List;
 
 public class AuthorDao {
 
+	// 필드
+	
+	// 생성자 - 생략가능
+	public AuthorDao() {
+		
+	}
+	
+	// 메소드 g/s
+	
+	// 메소드 일반
+	// 작가등록
 	public void authorInsert(String authorName, String authorDesc) {
 
 		// 0. import java.sql.*;
@@ -60,6 +71,7 @@ public class AuthorDao {
 
 	}
 
+	// 작가삭제
 	public void authorDelete(int authorId) {
 		// 0. import java.sql.*;
 		Connection conn = null;
@@ -72,7 +84,6 @@ public class AuthorDao {
 			// 2. Connection 얻어오기
 			String url = "jdbc:oracle:thin:@localhost:1521:xe";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
-			System.out.println("접속성공");
 
 			// 3. SQL문 준비 / 바인딩 / 실행
 			String query = "";
@@ -108,6 +119,7 @@ public class AuthorDao {
 
 	}
 
+	// 작가수정
 	public void authorUpdate(String authorName, String authorDesc, int authorId) {
 		// 0. import java.sql.*;
 		Connection conn = null;
@@ -120,7 +132,6 @@ public class AuthorDao {
 			// 2. Connection 얻어오기
 			String url = "jdbc:oracle:thin:@localhost:1521:xe";
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
-			System.out.println("접속성공");
 
 			// 3. SQL문 준비 / 바인딩 / 실행
 			String query = "";
@@ -159,6 +170,7 @@ public class AuthorDao {
 		}
 	}
 
+	// 작가리스트 가져오기
 	public List<AuthorVo> authorSelect() {
 
 		List<AuthorVo> authorList = new ArrayList<AuthorVo>();
