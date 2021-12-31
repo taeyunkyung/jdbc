@@ -11,17 +11,18 @@ import java.util.List;
 public class BookDao {
 
 	// 필드
+	// 0. import java.sql.*;
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+
 	private String driver = "oracle.jdbc.driver.OracleDriver";
 	private String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	private String id = "webdb";
 	private String pw = "webdb";
 
-	// 책 등록
-	public void bookInsert(BookVo bookVo) {
-		// 0. import java.sql.*;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-
+	// 메소드 일반
+	private void getConnection() {
 		try {
 			// 1. JDBC 드라이버 (Oracle) 로딩
 			Class.forName(driver);
@@ -29,6 +30,33 @@ public class BookDao {
 			// 2. Connection 얻어오기
 			conn = DriverManager.getConnection(url, id, pw);
 
+		} catch (ClassNotFoundException e) {
+			System.out.println("error: 드라이버 로딩실패 - " + e);
+		} catch (SQLException e) {
+			System.out.println("error." + e);
+		}
+	}
+
+	private void close() {
+		try {
+			// 자원정리
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+		} catch (SQLException e) {
+			System.out.println("error." + e);
+		}
+	}
+
+	// 책 등록
+	public void bookInsert(BookVo bookVo) {
+
+		this.getConnection();
+
+		try {
 			// 3. SQL문 준비 / 바인딩 / 실행
 			String query = "";
 			query += "insert into book ";
@@ -46,38 +74,19 @@ public class BookDao {
 			// 4. 결과처리
 			System.out.println(count + "건이 저장되었습니다.");
 
-		} catch (ClassNotFoundException e) {
-			System.out.println("error: 드라이버 로딩실패 - " + e);
 		} catch (SQLException e) {
 			System.out.println("error." + e);
-		} finally {
-			try {
-				// 자원정리
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("error." + e);
-			}
 		}
+
+		this.close();
 	}
 
 	// 책 삭제
 	public void bookDelete(int bookId) {
-		// 0. import java.sql.*;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
+
+		this.getConnection();
 
 		try {
-			// 1. JDBC 드라이버 (Oracle) 로딩
-			Class.forName(driver);
-
-			// 2. Connection 얻어오기
-			conn = DriverManager.getConnection(url, id, pw);
-
 			// 3. SQL문 준비 / 바인딩 / 실행
 			String query = "";
 			query += "delete from book ";
@@ -92,38 +101,19 @@ public class BookDao {
 			// 4. 결과처리
 			System.out.println(count + "건이 삭제되었습니다.");
 
-		} catch (ClassNotFoundException e) {
-			System.out.println("error: 드라이버 로딩실패 - " + e);
 		} catch (SQLException e) {
 			System.out.println("error." + e);
-		} finally {
-			try {
-				// 자원정리
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("error." + e);
-			}
 		}
+
+		this.close();
 	}
 
 	// 책 수정
 	public void bookUpdate(BookVo bookVo) {
-		// 0. import java.sql.*;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
+
+		this.getConnection();
 
 		try {
-			// 1. JDBC 드라이버 (Oracle) 로딩
-			Class.forName(driver);
-
-			// 2. Connection 얻어오기
-			conn = DriverManager.getConnection(url, id, pw);
-
 			// 3. SQL문 준비 / 바인딩 / 실행
 			String query = "";
 			query += "update book ";
@@ -146,23 +136,11 @@ public class BookDao {
 			// 4. 결과처리
 			System.out.println(count + "건이 수정되었습니다.");
 
-		} catch (ClassNotFoundException e) {
-			System.out.println("error: 드라이버 로딩실패 - " + e);
 		} catch (SQLException e) {
 			System.out.println("error." + e);
-		} finally {
-			try {
-				// 자원정리
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("error." + e);
-			}
 		}
+
+		this.close();
 	}
 
 	// 책 리스트 가져오기
@@ -170,18 +148,9 @@ public class BookDao {
 
 		List<BookVo> bookList = new ArrayList<BookVo>();
 
-		// 0. import java.sql.*;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		this.getConnection();
 
 		try {
-			// 1. JDBC 드라이버 (Oracle) 로딩
-			Class.forName(driver);
-
-			// 2. Connection 얻어오기
-			conn = DriverManager.getConnection(url, id, pw);
-
 			// 3. SQL문 준비 / 바인딩 / 실행
 			String query = "";
 			query += "select  book_id, ";
@@ -216,28 +185,11 @@ public class BookDao {
 
 			}
 
-		} catch (ClassNotFoundException e) {
-			System.out.println("error: 드라이버 로딩 실패 - " + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
-		} finally {
-
-			// 5. 자원정리
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("error:" + e);
-			}
-
 		}
+
+		this.close();
 
 		return bookList;
 	}
